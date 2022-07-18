@@ -4,6 +4,7 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
+        <h1>Ice Cream Shop</h1>
 <?php
 	$db_username = "TIAS";
 	$db_password = "tiger";
@@ -16,45 +17,52 @@
 		{
 			if(isset($_POST['name']) && isset($_POST['username']) && isset($_POST['address']) && isset($_POST['phone']) && isset($_POST['password']))
 			{
-				$name = $_POST['name'];
-                $username = $_POST['username'];
-                $address = $_POST['address'];
-                $phone = $_POST['phone'];
-                $password = $_POST['password'];
-                $c_id = 1;
-
-                //generate new id
-                $query = "SELECT c_id FROM customer order by c_id desc";
-                $result = oci_parse($conn, $query);
-                oci_execute($result);
-                $row = oci_fetch_array($result, OCI_BOTH);
-                $num_rows = oci_num_rows($result);
-                if($num_rows == 1)
+				if($_POST['name'] != "" && $_POST['username'] != "" && $_POST['address'] != "" && $_POST['phone'] != "" && $_POST['password'] != "")
                 {
-                    $c_id = $row[0];
-                    $c_id = $c_id + 5;
-                }
-                else
-                {
+                    $name = $_POST['name'];
+                    $username = $_POST['username'];
+                    $address = $_POST['address'];
+                    $phone = $_POST['phone'];
+                    $password = $_POST['password'];
                     $c_id = 1;
-                }
 
-                //insert into database
-                $query = "INSERT INTO customer VALUES ('$c_id', '$name', '$username', '$address', '$phone', '$password', null)";
-                $result = oci_parse($conn, $query);
-                oci_execute($result);
-                if($result)
-                {
-                    echo "Registration Successful!";
+                    //generate new id
+                    $query = "SELECT c_id FROM customer order by c_id desc";
+                    $result = oci_parse($conn, $query);
+                    oci_execute($result);
+                    $row = oci_fetch_array($result, OCI_BOTH);
+                    $num_rows = oci_num_rows($result);
+                    if($num_rows == 1)
+                    {
+                        $c_id = $row[0];
+                        $c_id = $c_id + 5;
+                    }
+                    else
+                    {
+                        $c_id = 1;
+                    }
+
+                    //insert into database
+                    $query = "INSERT INTO customer VALUES ('$c_id', '$name', '$username', '$address', '$phone', '$password', null)";
+                    $result = oci_parse($conn, $query);
+                    oci_execute($result);
+                    if($result)
+                    {
+                        echo "<div class='alert'>Registration Successful!</div>";
+                    }
+                    else
+                    {
+                        echo "<div class='alert'>Registration Failed!</div>";
+                    }
                 }
                 else
                 {
-                    echo "Registration Failed!";
+                    echo "<div class='alert'>Please fill in all fields!</div>";
                 }
 			}
 			else
 			{
-				echo "Please fill up all the fields!";
+				echo "<div class='alert'>Please fill up all the fields!</div>";
 			}
 
 			echo "<br><br>";
@@ -62,7 +70,7 @@
 	}
 	else
 	{
-		echo "Connection Failed!";
+		echo "<div class='alert'>Connection Failed!</div>";
 	}	
 ?>
         <form action="" method="POST">

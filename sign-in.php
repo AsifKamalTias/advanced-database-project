@@ -4,6 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
+	<h1>Ice Cream Shop</h1>
 <?php
 	$db_username = "TIAS";
 	$db_password = "tiger";
